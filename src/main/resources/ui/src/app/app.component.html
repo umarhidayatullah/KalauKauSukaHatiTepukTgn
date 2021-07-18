@@ -1,0 +1,74 @@
+<!--
+  ~ Copyright 2018 ABSA Group Limited
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<app-confirmation-dialog></app-confirmation-dialog>
+<app-login-dialog></app-login-dialog>
+
+<div class="loading" *ngIf="loading">
+    <span class="spinner spinner-inverse">
+        Loading...
+    </span>
+</div>
+
+<div class="main-container" *ngIf="!loading">
+  <header class="header-6" *ngIf="isAuthenticated">
+    <div class="branding">
+      <a routerLink="{{routes.WORKFLOWS}}" class="nav-link">
+        <img class="clr-icon" src="assets/header_logo.svg" alt="Hyperdrive logo">
+        <span class="title">Hyperdrive</span>
+      </a>
+    </div>
+    <div class="header-nav">
+      <a routerLinkActive="active" routerLink="{{routes.WORKFLOWS}}" class="nav-link nav-text">Workflows</a>
+      <a routerLinkActive="active" routerLink="{{routes.RUNS}}" class="nav-link nav-text">Runs</a>
+      <!-- Temporary solution clarity doesn't support dropdowns in header. Could be solved in https://github.com/vmware/clarity/issues/3844 -->
+      <a class="header-actions" [class.active-dropdown]="isActive(routes.ADMIN)">
+        <clr-dropdown>
+          <button class="nav-text" clrDropdownTrigger>
+            Admin
+            <clr-icon shape="caret down"></clr-icon>
+          </button>
+          <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+            <a clrDropdownItem routerLinkActive="active" routerLink="{{routes.JOB_TEMPLATES}}">Job templates</a>
+            <a clrDropdownItem routerLinkActive="active" routerLink="{{routes.NOTIFICATION_RULES}}">Notification rules</a>
+          </clr-dropdown-menu>
+        </clr-dropdown>
+      </a>
+    </div>
+    <div class="header-actions">
+      <clr-dropdown>
+        <button class="nav-text" clrDropdownTrigger aria-label="open user profile">
+          {{username}}
+          <clr-icon shape="caret down"></clr-icon>
+        </button>
+        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+          <a clrDropdownItem (click)="onLogOut()">Log out</a>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-item" style="cursor: default; pointer-events: none">
+            <strong>Environment:</strong> {{appInfo.environment}}
+            <br>
+            <strong>Version:</strong> {{appInfo.version}}
+          </div>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+  </header>
+
+  <div class="content-container">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>
+
